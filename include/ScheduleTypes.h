@@ -115,7 +115,7 @@ namespace YandexSchedule {
         Station to;
         bool has_transfers;
         Tickets tickets_info;
-        int duration;
+        uint32_t duration;
         std::string arrival_terminal;
         std::string start_date;
         std::string arrival_platform;
@@ -189,5 +189,47 @@ namespace YandexSchedule {
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ScheduleResponse,
         date, pagination, station, schedule, interval_schedule,
         schedule_direction, directions
+    )
+
+    struct Stop {
+        std::string arrival;
+        std::string departure;
+        uint32_t duration;
+        uint32_t stop_time;
+        Station station;
+        std::string terminal;
+        std::string platform;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Stop,
+        arrival, departure, duration, stop_time, station,
+        terminal, platform
+    )
+    
+    struct ThreadResponse {
+        std::string except_days;
+        std::string arrival_date;
+        std::string from;
+        std::string uid;
+        std::string title;
+        Interval interval;
+        std::string departure_date;
+        std::string start_time;
+        std::string number;
+        std::string short_title;
+        std::string days;
+        std::string to;
+        Carrier carrier;
+        std::string transport_type;
+        std::vector<Stop> stops;
+        std::string vehicle;
+        std::string start_date;
+        TransportSubtype transport_subtype;
+        std::string express_type;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ThreadResponse,
+        except_days, arrival_date, from, uid, title, interval,
+        departure_date, start_time, number, short_title, days,
+        to, carrier, transport_type, stops, vehicle, start_date,
+        transport_subtype, express_type
     )
 };

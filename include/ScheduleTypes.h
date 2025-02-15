@@ -286,4 +286,60 @@ namespace YandexSchedule {
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(CarriersResponse,
         carriers
     )
+
+    struct Codes {
+        std::string esr_code;
+        std::string yandex_code;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Codes,
+        esr_code, yandex_code
+    )
+
+    struct SettlementStation {
+        std::string direction;
+        Codes codes;
+        std::string station_type;
+        std::string title;
+        double longitude;
+        std::string transport_type;
+        double latitude;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(SettlementStation,
+        direction, codes, station_type, title, longitude,
+        transport_type, latitude
+    )
+
+    struct Settlement {
+        std::string title;
+        Codes codes;
+        std::vector<SettlementStation> stations;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Settlement,
+        title, codes, stations
+    )
+
+    struct Region {
+        std::vector<Settlement> settlements;
+        Codes codes;
+        std::string title;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Region,
+        settlements, codes, title
+    )
+
+    struct Country {
+        std::vector<Region> regions;
+        Codes codes;
+        std::string title;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Country,
+        regions, codes, title
+    )
+
+    struct AllStationsReponse {
+        std::vector<Country> countries;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(AllStationsReponse, countries)
+
+
 };

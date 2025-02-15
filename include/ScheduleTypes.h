@@ -264,4 +264,19 @@ namespace YandexSchedule {
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(NearestStationsResponse,
         pagination, stations
     )
+
+    struct NearestSettlementResponse {
+        double distance;
+        std::string code;
+        std::string title;
+        std::string popular_title;
+        std::string short_title;
+        double lat;
+        double lng;
+        std::string type;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(NearestSettlementResponse,
+        distance, code, title, popular_title, short_title,
+        lat, lng, type
+    )
 };

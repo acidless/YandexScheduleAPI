@@ -154,4 +154,40 @@ namespace YandexSchedule {
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(SearchResponse,
         pagination, interval_segments, segments, search
     )
+
+    struct Schedule {
+        std::string except_days;
+        std::string arrival;
+        Thread thread;
+        bool is_fuzzy;
+        std::string days;
+        std::string stops;
+        std::string departure;
+        std::string terminal;
+        std::string platform;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Schedule,
+        except_days, arrival, thread, is_fuzzy, days, stops,
+        departure, terminal, platform
+    )
+
+    struct Direction {
+        std::string code;
+        std::string title;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Direction, code, title)
+
+    struct ScheduleResponse {
+        std::string date;
+        Pagination pagination;
+        Station station;
+        std::vector<Schedule> schedule;
+        std::vector<Schedule> interval_schedule;
+        Direction schedule_direction;
+        std::vector<Direction> directions;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ScheduleResponse,
+        date, pagination, station, schedule, interval_schedule,
+        schedule_direction, directions
+    )
 };

@@ -279,4 +279,11 @@ namespace YandexSchedule {
         distance, code, title, popular_title, short_title,
         lat, lng, type
     )
+
+    struct CarriersResponse {
+        std::vector<Carrier> carriers;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(CarriersResponse,
+        carriers
+    )
 };

@@ -341,5 +341,25 @@ namespace YandexSchedule {
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(AllStationsReponse, countries)
 
+    struct Copyright {
+        std::string logo_vm;
+        std::string url;
+        std::string logo_vd;
+        std::string logo_hy;
+        std::string logo_hd;
+        std::string logo_vy;
+        std::string text;
+        std::string logo_hm;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Copyright,
+        logo_vm, url, logo_vd, logo_hy, logo_hd,
+        logo_vy, text, logo_hm
+    )
 
+    struct CopyrightResponse {
+        Copyright copyright;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(CopyrightResponse,
+        copyright
+    )
 };

@@ -232,4 +232,36 @@ namespace YandexSchedule {
         to, carrier, transport_type, stops, vehicle, start_date,
         transport_subtype, express_type
     )
+
+    struct TypeChoiceSchedule {
+        std::string desktop_url;
+        std::string touch_url;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(TypeChoiceSchedule,
+        desktop_url, touch_url
+    )
+
+    struct TypeChoice {
+        TypeChoiceSchedule schedule;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(TypeChoice, schedule)
+
+    struct NearestStation : public Station {
+        double distance;
+        TypeChoice type_choices;
+        std::string majority;
+        double lat;
+        double lng;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(NearestStation,
+        distance, type_choices, majority, lat, lng
+    )
+
+    struct NearestStationsResponse {
+        Pagination pagination;
+        std::vector<NearestStation> stations;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(NearestStationsResponse,
+        pagination, stations
+    )
 };

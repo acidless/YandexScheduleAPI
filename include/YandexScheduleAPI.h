@@ -19,17 +19,23 @@ namespace YandexSchedule {
         SearchResponse search(
             const std::string& from, 
             const std::string& to, 
-            const SearchRequestAdditional&& params = {}
+            const SearchRequestParams&& params = {}
         );
 
         ScheduleResponse schedule(
             const std::string& station, 
-            const ScheduleRequestAdditional&& params = {}
+            const ScheduleRequestParams&& params = {}
         );
 
         ThreadResponse thread(
             const std::string& uid, 
-            const ThreadRequestAdditional&& params = {}
+            const ThreadRequestParams&& params = {}
+        );
+
+        NearestStationsResponse nearestStations(
+            const Geo&& geo,
+            double distance, 
+            const NearestStationsRequestParams&& params = {}
         );
 
     private:

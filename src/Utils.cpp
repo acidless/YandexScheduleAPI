@@ -8,10 +8,7 @@ std::string YandexSchedule::Utils::today() {
     return buffer;
 }
 
-std::string YandexSchedule::Utils::toString(bool value) {
+template <>
+std::string YandexSchedule::Utils::toString<bool>(bool value) {
     return value ? "true" : "false";
-}
-
-std::string YandexSchedule::Utils::toString(uint16_t number) {
-    return std::to_string(number);
 }

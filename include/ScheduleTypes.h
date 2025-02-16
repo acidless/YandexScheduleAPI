@@ -8,8 +8,8 @@
 using json = nlohmann::json;
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
-        template <typename T>
-        struct adl_serializer<std::optional<T>> {
+    template <typename T>
+    struct adl_serializer<std::optional<T>> {
         static void to_json(json& j, const std::optional<T>& opt) {
             if (opt.has_value()) {
                 j = *opt;
@@ -23,6 +23,21 @@ NLOHMANN_JSON_NAMESPACE_BEGIN
                 opt.reset();
             } else {
                 opt = j.template get<T>();
+            }
+        }
+    };
+
+    template <>
+    struct adl_serializer<double> {
+        static void to_json(json& j, double d) {
+            if (!j.is_string()) {
+                j = d;
+            }
+        }
+
+        static void from_json(const json& j, double& d) {
+            if (!j.is_string()) {
+                d = j;
             }
         }
     };

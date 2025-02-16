@@ -49,6 +49,14 @@ namespace YandexSchedule {
             const CarrierRequestParams&& params = {}
         );
 
+        json allStations(
+            const BaseRequestParams&& params = {}
+        );
+
+        CopyrightResponse copyright(
+            const std::string& format = "json"
+        );
+
     private:
         json processResponse(const cpr::Response& response);
 

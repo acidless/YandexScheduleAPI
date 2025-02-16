@@ -307,10 +307,10 @@ namespace YandexSchedule {
         lat, lng, type
     )
 
-    struct CarriersResponse {
+    struct CarrierResponse {
         std::vector<Carrier> carriers;
     };
-    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(CarriersResponse,
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(CarrierResponse,
         carriers
     )
 
@@ -437,5 +437,9 @@ namespace YandexSchedule {
 
     struct NearestSettlementRequestParams : BaseRequestParams {
         double distance;
+    };
+
+    struct CarrierRequestParams : BaseRequestParams {
+        std::string system = "yandex";
     };
 };

@@ -76,6 +76,24 @@ YandexSchedule::NearestStationsResponse YandexSchedule::YandexScheduleAPI::neare
     return processResponse(r).template get<YandexSchedule::NearestStationsResponse>();
 }
 
+
+YandexSchedule::NearestSettlementResponse YandexSchedule::YandexScheduleAPI::nearestSettlement(
+    const Geo&& geo,
+    double distance,
+    const NearestSettlementRequestParams&& params
+) {
+    auto url = cpr::Url{baseUrl_ + "nearest_settlement/"};
+    auto cprParams = cpr::Parameters{
+        {"apikey", apiKey_}, {"format", params.format}, 
+        {"lang", params.lang}, {"lat",  Utils::toString(geo.lat)},
+        {"lng", Utils::toString(geo.lng)}, {"distance", Utils::toString(distance)}
+    };
+
+    cpr::Response r = cpr::Get(url, cprParams);
+    return processResponse(r).template get<YandexSchedule::NearestSettlementResponse>();
+}
+
+
 json YandexSchedule::YandexScheduleAPI::processResponse(const cpr::Response& response) {
     if(response.status_code != 200) {
         throw std::exception("Request error with status code: " + response.status_code);

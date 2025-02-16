@@ -214,12 +214,12 @@ namespace YandexSchedule {
     )
 
     struct Stop {
-        std::string arrival;
-        std::string departure;
+        std::optional<std::string> arrival;
+        std::optional<std::string> departure;
         uint32_t duration;
-        uint32_t stop_time;
+        std::optional<uint32_t> stop_time;
         Station station;
-        std::string terminal;
+        std::optional<std::string> terminal;
         std::string platform;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Stop,
@@ -228,25 +228,25 @@ namespace YandexSchedule {
     )
     
     struct ThreadResponse {
-        std::string except_days;
-        std::string arrival_date;
-        std::string from;
+        std::optional<std::string> except_days;
+        std::optional<std::string> arrival_date;
+        std::optional<std::string> from;
         std::string uid;
         std::string title;
         Interval interval;
-        std::string departure_date;
+        std::optional<std::string> departure_date;
         std::string start_time;
         std::string number;
         std::optional<std::string> short_title;
         std::string days;
-        std::string to;
+        std::optional<std::string> to;
         std::optional<Carrier> carrier;
         std::string transport_type;
         std::vector<Stop> stops;
-        std::string vehicle;
+        std::optional<std::string> vehicle;
         std::string start_date;
         TransportSubtype transport_subtype;
-        std::string express_type;
+        std::optional<std::string> express_type;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ThreadResponse,
         except_days, arrival_date, from, uid, title, interval,
@@ -410,5 +410,12 @@ namespace YandexSchedule {
         std::string system = "yandex";
         std::string show_systems = "yandex";
         std::string result_timezone;
+    };
+
+    struct ThreadRequestAdditional : public BaseRequestAdditional {
+        std::string from;
+        std::string to;
+        std::string date;
+        std::string show_systems = "yandex";
     };
 };

@@ -27,6 +27,11 @@ namespace YandexSchedule {
             const ScheduleRequestAdditional&& params = {}
         );
 
+        ThreadResponse thread(
+            const std::string& uid, 
+            const ThreadRequestAdditional&& params = {}
+        );
+
     private:
         json processResponse(const cpr::Response& response);
 

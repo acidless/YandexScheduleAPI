@@ -43,6 +43,21 @@ YandexSchedule::ScheduleResponse YandexSchedule::YandexScheduleAPI::schedule(
     return processResponse(r).template get<YandexSchedule::ScheduleResponse>();
 }
 
+YandexSchedule::ThreadResponse YandexSchedule::YandexScheduleAPI::thread(
+    const std::string& uid, 
+    const ThreadRequestAdditional&& params
+) {
+    auto url = cpr::Url{baseUrl_ + "thread/"};
+    auto cprParams = cpr::Parameters{
+        {"apikey", apiKey_}, {"from", params.from},
+        {"format", params.format}, {"lang", params.lang}, 
+        {"to", params.to}, {"uid", uid},{"show_systems", params.show_systems}
+    };
+
+    cpr::Response r = cpr::Get(url, cprParams);
+    return processResponse(r).template get<YandexSchedule::ThreadResponse>();
+}
+
 json YandexSchedule::YandexScheduleAPI::processResponse(const cpr::Response& response) {
     if(response.status_code != 200) {
         throw std::exception("Request error with status code: " + response.status_code);

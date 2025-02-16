@@ -108,6 +108,31 @@ YandexSchedule::CarrierResponse YandexSchedule::YandexScheduleAPI::carrier(
     return processResponse(r).template get<YandexSchedule::CarrierResponse>();
 }
 
+json YandexSchedule::YandexScheduleAPI::allStations(
+    const BaseRequestParams&& params
+) {
+    auto url = cpr::Url{baseUrl_ + "stations_list/"};
+    auto cprParams = cpr::Parameters{
+        {"apikey", apiKey_}, {"format", params.format}, 
+        {"lang", params.lang}
+    };
+
+    cpr::Response r = cpr::Get(url, cprParams);
+    return processResponse(r);
+}
+
+YandexSchedule::CopyrightResponse YandexSchedule::YandexScheduleAPI::copyright(
+    const std::string& format
+) {
+    auto url = cpr::Url{baseUrl_ + "copyright/"};
+    auto cprParams = cpr::Parameters{
+        {"apikey", apiKey_}, {"format", format}
+    };
+
+    cpr::Response r = cpr::Get(url, cprParams);
+    return processResponse(r).template get<YandexSchedule::CopyrightResponse>();
+}
+
 json YandexSchedule::YandexScheduleAPI::processResponse(const cpr::Response& response) {
     if(response.status_code != 200) {
         throw std::exception("Request error with status code: " + response.status_code);

@@ -49,7 +49,7 @@ namespace YandexSchedule {
             const CarrierRequestParams&& params = {}
         );
 
-        json allStations(
+        AllStationsReponse allStations(
             const BaseRequestParams&& params = {}
         );
 

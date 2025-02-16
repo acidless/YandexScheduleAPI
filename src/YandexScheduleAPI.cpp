@@ -40,7 +40,7 @@ YandexSchedule::ScheduleResponse YandexSchedule::YandexScheduleAPI::schedule(
     };
 
     cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<YandexSchedule::ScheduleResponse>();
+    return processResponse(r).template get<ScheduleResponse>();
 }
 
 YandexSchedule::ThreadResponse YandexSchedule::YandexScheduleAPI::thread(
@@ -55,7 +55,7 @@ YandexSchedule::ThreadResponse YandexSchedule::YandexScheduleAPI::thread(
     };
 
     cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<YandexSchedule::ThreadResponse>();
+    return processResponse(r).template get<ThreadResponse>();
 }
 
 YandexSchedule::NearestStationsResponse YandexSchedule::YandexScheduleAPI::nearestStations(
@@ -73,7 +73,7 @@ YandexSchedule::NearestStationsResponse YandexSchedule::YandexScheduleAPI::neare
     };
 
     cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<YandexSchedule::NearestStationsResponse>();
+    return processResponse(r).template get<NearestStationsResponse>();
 }
 
 
@@ -90,7 +90,7 @@ YandexSchedule::NearestSettlementResponse YandexSchedule::YandexScheduleAPI::nea
     };
 
     cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<YandexSchedule::NearestSettlementResponse>();
+    return processResponse(r).template get<NearestSettlementResponse>();
 }
 
 YandexSchedule::CarrierResponse YandexSchedule::YandexScheduleAPI::carrier(
@@ -105,10 +105,10 @@ YandexSchedule::CarrierResponse YandexSchedule::YandexScheduleAPI::carrier(
     };
 
     cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<YandexSchedule::CarrierResponse>();
+    return processResponse(r).template get<CarrierResponse>();
 }
 
-json YandexSchedule::YandexScheduleAPI::allStations(
+YandexSchedule::AllStationsReponse YandexSchedule::YandexScheduleAPI::allStations(
     const BaseRequestParams&& params
 ) {
     auto url = cpr::Url{baseUrl_ + "stations_list/"};
@@ -118,7 +118,7 @@ json YandexSchedule::YandexScheduleAPI::allStations(
     };
 
     cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r);
+    return processResponse(r).template get<AllStationsReponse>();
 }
 
 YandexSchedule::CopyrightResponse YandexSchedule::YandexScheduleAPI::copyright(
@@ -130,7 +130,7 @@ YandexSchedule::CopyrightResponse YandexSchedule::YandexScheduleAPI::copyright(
     };
 
     cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<YandexSchedule::CopyrightResponse>();
+    return processResponse(r).template get<CopyrightResponse>();
 }
 
 json YandexSchedule::YandexScheduleAPI::processResponse(const cpr::Response& response) {

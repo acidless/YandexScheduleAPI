@@ -5,7 +5,9 @@ namespace YandexSchedule {
     namespace Utils {
         std::string today();
 
-        std::string toString(bool value);
-        std::string toString(uint16_t number);
+        template<typename T>
+        std::string toString(T value) {
+            return std::to_string(value);
+        }
     };
 };

@@ -8,7 +8,7 @@ YandexSchedule::YandexScheduleAPI::YandexScheduleAPI(const std::string& apiKey)
 YandexSchedule::SearchResponse YandexSchedule::YandexScheduleAPI::search(
     const std::string& from, 
     const std::string& to, 
-    const SearchRequestAdditional&& params
+    const SearchRequestParams&& params
 ) {
     auto url = cpr::Url{baseUrl_ + "search/"};
     auto cprParams = cpr::Parameters{
@@ -27,7 +27,7 @@ YandexSchedule::SearchResponse YandexSchedule::YandexScheduleAPI::search(
 
 YandexSchedule::ScheduleResponse YandexSchedule::YandexScheduleAPI::schedule(
     const std::string& station, 
-    const ScheduleRequestAdditional&& params
+    const ScheduleRequestParams&& params
 ) {
     auto url = cpr::Url{baseUrl_ + "schedule/"};
     auto cprParams = cpr::Parameters{
@@ -45,7 +45,7 @@ YandexSchedule::ScheduleResponse YandexSchedule::YandexScheduleAPI::schedule(
 
 YandexSchedule::ThreadResponse YandexSchedule::YandexScheduleAPI::thread(
     const std::string& uid, 
-    const ThreadRequestAdditional&& params
+    const ThreadRequestParams&& params
 ) {
     auto url = cpr::Url{baseUrl_ + "thread/"};
     auto cprParams = cpr::Parameters{
@@ -56,6 +56,24 @@ YandexSchedule::ThreadResponse YandexSchedule::YandexScheduleAPI::thread(
 
     cpr::Response r = cpr::Get(url, cprParams);
     return processResponse(r).template get<YandexSchedule::ThreadResponse>();
+}
+
+YandexSchedule::NearestStationsResponse YandexSchedule::YandexScheduleAPI::nearestStations(
+    const Geo&& geo,
+    double distance, 
+    const NearestStationsRequestParams&& params
+) {
+    auto url = cpr::Url{baseUrl_ + "nearest_stations/"};
+    auto cprParams = cpr::Parameters{
+        {"apikey", apiKey_}, {"station_types", params.station_types},
+        {"format", params.format}, {"lang", params.lang}, 
+        {"transport_types", params.transport_types}, {"offset", Utils::toString(params.offset)},
+        {"limit", Utils::toString(params.limit)}, {"lat",  Utils::toString(geo.lat)},
+        {"lng", Utils::toString(geo.lng)}, {"distance", Utils::toString(distance)}
+    };
+
+    cpr::Response r = cpr::Get(url, cprParams);
+    return processResponse(r).template get<YandexSchedule::NearestStationsResponse>();
 }
 
 json YandexSchedule::YandexScheduleAPI::processResponse(const cpr::Response& response) {

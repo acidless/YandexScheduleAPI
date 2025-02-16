@@ -268,10 +268,15 @@ namespace YandexSchedule {
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(TypeChoice, schedule)
 
+    struct Geo {
+        double lat;
+        double lng;
+    };
+
     struct NearestStation : public Station {
         double distance;
         TypeChoice type_choices;
-        std::string majority;
+        std::optional<uint16_t> majority;
         double lat;
         double lng;
     };
@@ -385,24 +390,29 @@ namespace YandexSchedule {
         copyright
     )
 
-    struct BaseRequestAdditional {
+    struct BaseRequestParams {
         std::string format = "json";
         std::string lang = "ru_RU";
     };
 
-    struct SearchRequestAdditional : public BaseRequestAdditional {
+    struct PaginatedRequestParams {
+        uint16_t offset = 0;
+        uint16_t limit = 100;
+    };
+
+    struct SearchRequestParams
+    : BaseRequestParams, PaginatedRequestParams {
         std::string date;
         std::string transport_types;
         std::string system = "yandex";
         std::string show_systems = "yandex";
-        uint16_t offset = 0;
-        uint16_t limit = 100;
+       
         bool add_days_mask = false;
         std::string result_timezone;
         bool transfers = false;
     };
 
-    struct ScheduleRequestAdditional : public BaseRequestAdditional {
+    struct ScheduleRequestParams : BaseRequestParams {
         std::string date;
         std::string transport_types;
         std::string direction;
@@ -412,10 +422,16 @@ namespace YandexSchedule {
         std::string result_timezone;
     };
 
-    struct ThreadRequestAdditional : public BaseRequestAdditional {
+    struct ThreadRequestParams : BaseRequestParams {
         std::string from;
         std::string to;
         std::string date;
         std::string show_systems = "yandex";
+    };
+    
+    struct NearestStationsRequestParams
+     : BaseRequestParams, PaginatedRequestParams {
+        std::string station_types;
+        std::string transport_types;
     };
 };

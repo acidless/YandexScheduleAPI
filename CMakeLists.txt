@@ -5,10 +5,16 @@ add_library(
     ${PROJECT_NAME}
     STATIC
     src/YandexScheduleAPI.cpp
+    src/Utils.cpp
 )
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+
+if(WIN32)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+endif()
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
@@ -31,6 +37,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 install(
     FILES 
+    include/ScheduleTypes.h
+    include/Utils.h
     include/YandexScheduleAPI.h
     DESTINATION include
 )

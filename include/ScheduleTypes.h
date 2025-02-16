@@ -434,4 +434,8 @@ namespace YandexSchedule {
         std::string station_types;
         std::string transport_types;
     };
+
+    struct NearestSettlementRequestParams : BaseRequestParams {
+        double distance;
+    };
 };

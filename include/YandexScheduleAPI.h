@@ -38,6 +38,12 @@ namespace YandexSchedule {
             const NearestStationsRequestParams&& params = {}
         );
 
+        NearestSettlementResponse nearestSettlement(
+            const Geo&& geo,
+            double distance = 50,
+            const NearestSettlementRequestParams&& params = {}
+        );
+
     private:
         json processResponse(const cpr::Response& response);
 

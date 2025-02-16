@@ -2,9 +2,31 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <optional>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
+
+NLOHMANN_JSON_NAMESPACE_BEGIN
+        template <typename T>
+        struct adl_serializer<std::optional<T>> {
+        static void to_json(json& j, const std::optional<T>& opt) {
+            if (opt.has_value()) {
+                j = *opt;
+            } else {
+                j = nullptr;
+            }
+        }
+
+        static void from_json(const json& j, std::optional<T>& opt) {
+            if (j.is_null()) {
+                opt.reset();
+            } else {
+                opt = j.template get<T>();
+            }
+        }
+    };
+NLOHMANN_JSON_NAMESPACE_END
 
 namespace YandexSchedule {
     struct Pagination {
@@ -20,8 +42,8 @@ namespace YandexSchedule {
         std::string title;
         std::string station_type;
         std::string station_type_name;
-        std::string popular_title;
-        std::string short_title;
+        std::optional<std::string> popular_title;
+        std::optional<std::string> short_title;
         std::string transport_type;
         std::string type;
     };
@@ -38,9 +60,9 @@ namespace YandexSchedule {
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Interval, density, end_time, begin_time)
 
     struct CarrierCode {
-        std::string icao;
-        std::string sirena;
-        std::string iata;
+        std::optional<std::string> icao;
+        std::optional<std::string> sirena;
+        std::optional<std::string> iata;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(CarrierCode, icao, sirena, iata)
 
@@ -48,13 +70,13 @@ namespace YandexSchedule {
         int64_t code;
         std::string contracts;
         std::string url;
-        std::string logo_svg;
+        std::optional<std::string> logo_svg;
         std::string title;
         std::string phone;
         CarrierCode codes;
-        std::string address;
-        std::string logo;
-        std::string email;  
+        std::optional<std::string> address;
+        std::optional<std::string> logo;
+        std::optional<std::string> email;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Carrier,
         code, contracts, url, logo_svg, title, phone,
@@ -62,9 +84,9 @@ namespace YandexSchedule {
     )
 
     struct TransportSubtype {
-        std::string color;
-        std::string code;
-        std::string title;
+        std::optional<std::string> color;
+        std::optional<std::string> code;
+        std::optional<std::string> title;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(TransportSubtype, color, code, title)
 
@@ -73,13 +95,13 @@ namespace YandexSchedule {
         std::string title;
         Interval interval;
         std::string number;
-        std::string short_title;
+        std::optional<std::string> short_title;
         std::string thread_method_link;
-        Carrier carrier;
+        std::optional<Carrier> carrier;
         std::string transport_type;
-        std::string vehicle;
+        std::optional<std::string> vehicle;
         TransportSubtype transport_subtype;
-        std::string express_type;
+        std::optional<std::string> express_type;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Thread,
         uid, title, interval, number, short_title,
@@ -111,14 +133,14 @@ namespace YandexSchedule {
         Thread thread;
         std::string departure_platform;
         std::string stops;
-        std::string departure_terminal;
+        std::optional<std::string> departure_terminal;
         Station to;
         bool has_transfers;
         Tickets tickets_info;
         uint32_t duration;
-        std::string arrival_terminal;
+        std::optional<std::string> arrival_terminal;
         std::string start_date;
-        std::string arrival_platform;
+        std::optional<std::string> arrival_platform;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Segment,
         from, thread, departure_platform, stops,
@@ -131,7 +153,7 @@ namespace YandexSchedule {
         std::string code;
         std::string type;
         std::string popular_title;
-        std::string short_title;
+        std::optional<std::string> short_title;
         std::string title;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(SearchPlace,
@@ -139,7 +161,7 @@ namespace YandexSchedule {
     )
 
     struct Search {
-        std::string date;
+        std::optional<std::string> date;
         SearchPlace from;
         SearchPlace to;
     };
@@ -156,8 +178,8 @@ namespace YandexSchedule {
     )
 
     struct Schedule {
-        std::string except_days;
-        std::string arrival;
+        std::optional<std::string> except_days;
+        std::optional<std::string> arrival;
         Thread thread;
         bool is_fuzzy;
         std::string days;
@@ -178,7 +200,7 @@ namespace YandexSchedule {
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Direction, code, title)
 
     struct ScheduleResponse {
-        std::string date;
+        std::optional<std::string> date;
         Pagination pagination;
         Station station;
         std::vector<Schedule> schedule;
@@ -215,10 +237,10 @@ namespace YandexSchedule {
         std::string departure_date;
         std::string start_time;
         std::string number;
-        std::string short_title;
+        std::optional<std::string> short_title;
         std::string days;
         std::string to;
-        Carrier carrier;
+        std::optional<Carrier> carrier;
         std::string transport_type;
         std::vector<Stop> stops;
         std::string vehicle;
@@ -362,4 +384,31 @@ namespace YandexSchedule {
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(CopyrightResponse,
         copyright
     )
+
+    struct BaseRequestAdditional {
+        std::string format = "json";
+        std::string lang = "ru_RU";
+    };
+
+    struct SearchRequestAdditional : public BaseRequestAdditional {
+        std::string date;
+        std::string transport_types;
+        std::string system = "yandex";
+        std::string show_systems = "yandex";
+        uint16_t offset = 0;
+        uint16_t limit = 100;
+        bool add_days_mask = false;
+        std::string result_timezone;
+        bool transfers = false;
+    };
+
+    struct ScheduleRequestAdditional : public BaseRequestAdditional {
+        std::string date;
+        std::string transport_types;
+        std::string direction;
+        std::string event = "departure";
+        std::string system = "yandex";
+        std::string show_systems = "yandex";
+        std::string result_timezone;
+    };
 };

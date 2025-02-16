@@ -44,6 +44,11 @@ namespace YandexSchedule {
             const NearestSettlementRequestParams&& params = {}
         );
 
+        CarrierResponse carrier(
+            const std::string& carrierCode,
+            const CarrierRequestParams&& params = {}
+        );
+
     private:
         json processResponse(const cpr::Response& response);
 

@@ -27,20 +27,6 @@ NLOHMANN_JSON_NAMESPACE_BEGIN
         }
     };
 
-    template <>
-    struct adl_serializer<double> {
-        static void to_json(json& j, double d) {
-            if (!j.is_string()) {
-                j = d;
-            }
-        }
-
-        static void from_json(const json& j, double& d) {
-            if (!j.is_string()) {
-                d = j;
-            }
-        }
-    };
 NLOHMANN_JSON_NAMESPACE_END
 
 namespace YandexSchedule {
@@ -342,13 +328,10 @@ namespace YandexSchedule {
         Codes codes;
         std::string station_type;
         std::string title;
-        double longitude;
         std::string transport_type;
-        double latitude;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(SettlementStation,
-        direction, codes, station_type, title, longitude,
-        transport_type, latitude
+        direction, codes, station_type, title, transport_type
     )
 
     struct Settlement {

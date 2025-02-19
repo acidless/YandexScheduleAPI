@@ -3,7 +3,7 @@ project(yandex_schedule VERSION 1.0 LANGUAGES CXX)
 
 add_library(
     ${PROJECT_NAME}
-    STATIC
+    SHARED
     src/YandexScheduleAPI.cpp
     src/Utils.cpp
     src/Cache/FileCache.cpp
@@ -11,12 +11,15 @@ add_library(
     src/Exceptions/HTTPException.cpp
 )
 
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE YANDEX_SCHEDULE_EXPORTS)
+
 if(WIN32)
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 endif()
 
 target_include_directories(${PROJECT_NAME}
@@ -38,17 +41,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC cpr::cpr nlohmann_json::nlohmann_js
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
-install(
-    FILES 
-    include/ScheduleTypes.h
-    include/Utils.h
-    include/YandexScheduleAPI.h
-    include/Cache/Cache.h
-    include/Cache/FileCache.h
-    include/Cache/MemoryCache.h
-    include/Exceptions/HTTPException.h
-    DESTINATION include
-)
+install(DIRECTORY include/ DESTINATION include)
 
 set(TEST_FILE "${CMAKE_SOURCE_DIR}/test/test.cpp")
 if(EXISTS ${TEST_FILE})

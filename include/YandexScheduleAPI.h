@@ -11,11 +11,21 @@
 #include "Cache/MemoryCache.h"
 #include "Exceptions/HTTPException.h"
 
+#ifdef _WIN32
+    #ifdef YANDEX_SCHEDULE_EXPORTS
+        #define YANDEX_SCHEDULE_API __declspec(dllexport)
+    #else
+        #define YANDEX_SCHEDULE_API __declspec(dllimport)
+    #endif
+#else
+    #define YANDEX_SCHEDULE_API
+#endif
+
 using json = nlohmann::json;
 
 namespace YandexSchedule {
 
-class YandexScheduleAPI {
+class YANDEX_SCHEDULE_API YandexScheduleAPI {
 public:
     YandexScheduleAPI(const std::string& apiKey);
     YandexScheduleAPI(const std::string& apiKey, Cache* cache);

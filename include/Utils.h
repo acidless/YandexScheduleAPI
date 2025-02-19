@@ -10,5 +10,8 @@ namespace YandexSchedule {
         std::string toString(T value) {
             return std::to_string(value);
         }
+
+        template <>
+        std::string toString<bool>(bool value);
     };
 };

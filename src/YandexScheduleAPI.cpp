@@ -1,7 +1,11 @@
 #include "YandexScheduleAPI.h"
 
 YandexSchedule::YandexScheduleAPI::YandexScheduleAPI(const std::string& apiKey) 
-: apiKey_(apiKey) {
+: apiKey_(apiKey), pCache_(new MemoryCache()) {
+}
+
+YandexSchedule::YandexScheduleAPI::YandexScheduleAPI(const std::string& apiKey, Cache* cache)
+: apiKey_(apiKey), pCache_(cache) {
 
 }
 
@@ -21,8 +25,7 @@ YandexSchedule::SearchResponse YandexSchedule::YandexScheduleAPI::search(
         {"result_timezone", params.result_timezone}, {"transfers", Utils::toString(params.transfers)},
     };
 
-    cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<YandexSchedule::SearchResponse>();
+    return getWithCache(url, cprParams).template get<SearchResponse>();
 }
 
 YandexSchedule::ScheduleResponse YandexSchedule::YandexScheduleAPI::schedule(
@@ -39,8 +42,7 @@ YandexSchedule::ScheduleResponse YandexSchedule::YandexScheduleAPI::schedule(
         {"event", params.event}
     };
 
-    cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<ScheduleResponse>();
+    return getWithCache(url, cprParams).template get<ScheduleResponse>();
 }
 
 YandexSchedule::ThreadResponse YandexSchedule::YandexScheduleAPI::thread(
@@ -54,8 +56,7 @@ YandexSchedule::ThreadResponse YandexSchedule::YandexScheduleAPI::thread(
         {"to", params.to}, {"uid", uid},{"show_systems", params.show_systems}
     };
 
-    cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<ThreadResponse>();
+    return getWithCache(url, cprParams).template get<ThreadResponse>();
 }
 
 YandexSchedule::NearestStationsResponse YandexSchedule::YandexScheduleAPI::nearestStations(
@@ -72,8 +73,7 @@ YandexSchedule::NearestStationsResponse YandexSchedule::YandexScheduleAPI::neare
         {"lng", Utils::toString(geo.lng)}, {"distance", Utils::toString(distance)}
     };
 
-    cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<NearestStationsResponse>();
+    return getWithCache(url, cprParams).template get<NearestStationsResponse>();
 }
 
 
@@ -89,8 +89,7 @@ YandexSchedule::NearestSettlementResponse YandexSchedule::YandexScheduleAPI::nea
         {"lng", Utils::toString(geo.lng)}, {"distance", Utils::toString(distance)}
     };
 
-    cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<NearestSettlementResponse>();
+    return getWithCache(url, cprParams).template get<NearestSettlementResponse>();
 }
 
 YandexSchedule::CarrierResponse YandexSchedule::YandexScheduleAPI::carrier(
@@ -104,8 +103,7 @@ YandexSchedule::CarrierResponse YandexSchedule::YandexScheduleAPI::carrier(
         {"code", carrierCode}
     };
 
-    cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<CarrierResponse>();
+    return getWithCache(url, cprParams).template get<CarrierResponse>();
 }
 
 YandexSchedule::AllStationsReponse YandexSchedule::YandexScheduleAPI::allStations(
@@ -133,10 +131,42 @@ YandexSchedule::CopyrightResponse YandexSchedule::YandexScheduleAPI::copyright(
     return processResponse(r).template get<CopyrightResponse>();
 }
 
-json YandexSchedule::YandexScheduleAPI::processResponse(const cpr::Response& response) {
-    if(response.status_code != 200) {
-        throw std::exception("Request error with status code: " + response.status_code);
+json YandexSchedule::YandexScheduleAPI::getWithCache(
+    const cpr::Url& url, 
+    const cpr::Parameters& params
+    ) {
+    if(auto cachedRes = tryGetFromCache(makeFullUrl(url, params))) {
+        return cachedRes.value();
     }
     
+    cpr::Response r = cpr::Get(url, params);
+    return processResponse(r);
+}
+
+std::optional<json> YandexSchedule::YandexScheduleAPI::tryGetFromCache(const std::string& key) {
+    if(auto response = pCache_->get(key)) {
+        return json::parse(response.value());
+    }
+
+    return {};
+}
+
+std::string YandexSchedule::YandexScheduleAPI::makeFullUrl(
+    const cpr::Url& url, 
+    const cpr::Parameters& params
+) const {
+    return url.str() + "?" + params.GetContent({}).c_str();
+}
+
+json YandexSchedule::YandexScheduleAPI::processResponse(const cpr::Response& response) {
+    if(response.status_code == 0) {
+        throw std::runtime_error(response.error.message);
+    }
+    
+    if(response.status_code >= 400) {
+        throw HTTPException("HTTP error: ", response.status_code);
+    }
+    
+    pCache_->set(response.url.c_str(), response.text);
     return json::parse(response.text);
 }

@@ -8,59 +8,70 @@
 #include <nlohmann/json.hpp>
 #include "ScheduleTypes.h"
 #include "Utils.h"
+#include "Cache/MemoryCache.h"
+#include "Exceptions/HTTPException.h"
 
 using json = nlohmann::json;
 
 namespace YandexSchedule {
-    class YandexScheduleAPI {
-    public:
-        YandexScheduleAPI(const std::string& apiKey);
 
-        SearchResponse search(
-            const std::string& from, 
-            const std::string& to, 
-            const SearchRequestParams&& params = {}
-        );
+class YandexScheduleAPI {
+public:
+    YandexScheduleAPI(const std::string& apiKey);
+    YandexScheduleAPI(const std::string& apiKey, Cache* cache);
 
-        ScheduleResponse schedule(
-            const std::string& station, 
-            const ScheduleRequestParams&& params = {}
-        );
+    SearchResponse search(
+        const std::string& from, 
+        const std::string& to, 
+        const SearchRequestParams&& params = {}
+    );
 
-        ThreadResponse thread(
-            const std::string& uid, 
-            const ThreadRequestParams&& params = {}
-        );
+    ScheduleResponse schedule(
+        const std::string& station, 
+        const ScheduleRequestParams&& params = {}
+    );
 
-        NearestStationsResponse nearestStations(
-            const Geo&& geo,
-            double distance, 
-            const NearestStationsRequestParams&& params = {}
-        );
+    ThreadResponse thread(
+        const std::string& uid, 
+        const ThreadRequestParams&& params = {}
+    );
 
-        NearestSettlementResponse nearestSettlement(
-            const Geo&& geo,
-            double distance = 50,
-            const NearestSettlementRequestParams&& params = {}
-        );
+    NearestStationsResponse nearestStations(
+        const Geo&& geo,
+        double distance, 
+        const NearestStationsRequestParams&& params = {}
+    );
 
-        CarrierResponse carrier(
-            const std::string& carrierCode,
-            const CarrierRequestParams&& params = {}
-        );
+    NearestSettlementResponse nearestSettlement(
+        const Geo&& geo,
+        double distance = 50,
+        const NearestSettlementRequestParams&& params = {}
+    );
 
-        AllStationsReponse allStations(
-            const BaseRequestParams&& params = {}
-        );
+    CarrierResponse carrier(
+        const std::string& carrierCode,
+        const CarrierRequestParams&& params = {}
+    );
 
-        CopyrightResponse copyright(
-            const std::string& format = "json"
-        );
+    AllStationsReponse allStations(
+        const BaseRequestParams&& params = {}
+    );
 
-    private:
-        json processResponse(const cpr::Response& response);
+    CopyrightResponse copyright(
+        const std::string& format = "json"
+    );
 
-        std::string baseUrl_ = "https://api.rasp.yandex.net/v3.0/";
-        std::string apiKey_;
-    };
+private:
+    json getWithCache(const cpr::Url& url, const cpr::Parameters& params);
+    std::optional<json> tryGetFromCache(const std::string& key);
+
+
+    std::string makeFullUrl(const cpr::Url& url, const cpr::Parameters& params) const;
+    json processResponse(const cpr::Response& response);
+
+    std::string baseUrl_ = "https://api.rasp.yandex.net/v3.0/";
+    std::string apiKey_;
+    std::unique_ptr<Cache> pCache_;
+};
+
 };

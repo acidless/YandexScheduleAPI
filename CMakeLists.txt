@@ -6,6 +6,9 @@ add_library(
     STATIC
     src/YandexScheduleAPI.cpp
     src/Utils.cpp
+    src/Cache/FileCache.cpp
+    src/Cache/MemoryCache.cpp
+    src/Exceptions/HTTPException.cpp
 )
 
 set(CMAKE_CXX_STANDARD 17)
@@ -40,6 +43,10 @@ install(
     include/ScheduleTypes.h
     include/Utils.h
     include/YandexScheduleAPI.h
+    include/Cache/Cache.h
+    include/Cache/FileCache.h
+    include/Cache/MemoryCache.h
+    include/Exceptions/HTTPException.h
     DESTINATION include
 )
 

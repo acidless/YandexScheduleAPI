@@ -9,6 +9,7 @@
 #include "ScheduleTypes.h"
 #include "Utils.h"
 #include "Cache/MemoryCache.h"
+#include "Cache/FileCache.h"
 #include "Exceptions/HTTPException.h"
 
 #ifdef _WIN32

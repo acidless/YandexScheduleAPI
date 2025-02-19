@@ -129,7 +129,36 @@ namespace YandexSchedule {
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Tickets, et_marker, places)
 
-    struct Segment {
+    struct Transfer {
+        std::string type;
+        std::string title;
+        std::string short_title;
+        std::string popular_title;
+        std::string code;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Transfer,
+        type, title, short_title, popular_title, code
+    )
+
+    struct Detail {
+        Station from;
+        Thread thread;
+        std::string departure_platform;
+        std::string stops;
+        std::optional<std::string> departure_terminal;
+        Station to;
+        uint32_t duration;
+        std::optional<std::string> arrival_terminal;
+        std::string start_date;
+        std::optional<std::string> arrival_platform;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Detail,
+        from, thread, departure_platform, stops,
+        departure_terminal, to, duration, arrival_terminal,
+        start_date, arrival_platform
+    )
+
+    struct Segment : Detail {
         Station from;
         Thread thread;
         std::string departure_platform;
@@ -137,6 +166,8 @@ namespace YandexSchedule {
         std::optional<std::string> departure_terminal;
         Station to;
         bool has_transfers;
+        std::vector<Transfer> transfers;
+        std::vector<Detail> details;
         Tickets tickets_info;
         uint32_t duration;
         std::optional<std::string> arrival_terminal;
@@ -147,7 +178,7 @@ namespace YandexSchedule {
         from, thread, departure_platform, stops,
         departure_terminal, to, has_transfers,
         tickets_info, duration, arrival_terminal,
-        start_date, arrival_platform
+        start_date, arrival_platform, transfers, details
     )
 
     struct SearchPlace {

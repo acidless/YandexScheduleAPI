@@ -11,6 +11,12 @@
 #include "Cache/MemoryCache.h"
 #include "Cache/FileCache.h"
 #include "Exceptions/HTTPException.h"
+#include "RequestParams/SearchRequestParams.h"
+#include "RequestParams/ScheduleRequestParams.h"
+#include "RequestParams/NearestStationsRequestParams.h"
+#include "RequestParams/NearestSettlementRequestParams.h"
+#include "RequestParams/ThreadRequestParams.h"
+#include "RequestParams/CarrierRequestParams.h"
 
 #ifdef _WIN32
     #ifdef YANDEX_SCHEDULE_EXPORTS
@@ -34,38 +40,38 @@ public:
     SearchResponse search(
         const std::string& from, 
         const std::string& to, 
-        const SearchRequestParams&& params = {}
+        const SearchRequestParams& params = {}
     );
 
     ScheduleResponse schedule(
         const std::string& station, 
-        const ScheduleRequestParams&& params = {}
+        const ScheduleRequestParams& params = {}
     );
 
     ThreadResponse thread(
         const std::string& uid, 
-        const ThreadRequestParams&& params = {}
+        const ThreadRequestParams& params = {}
     );
 
     NearestStationsResponse nearestStations(
         const Geo&& geo,
         double distance, 
-        const NearestStationsRequestParams&& params = {}
+        const NearestStationsRequestParams& params = {}
     );
 
     NearestSettlementResponse nearestSettlement(
         const Geo&& geo,
         double distance = 50,
-        const NearestSettlementRequestParams&& params = {}
+        const NearestSettlementRequestParams& params = {}
     );
 
     CarrierResponse carrier(
         const std::string& carrierCode,
-        const CarrierRequestParams&& params = {}
+        const CarrierRequestParams& params = {}
     );
 
     AllStationsReponse allStations(
-        const BaseRequestParams&& params = {}
+        const BaseRequestParams& params = {}
     );
 
     CopyrightResponse copyright(

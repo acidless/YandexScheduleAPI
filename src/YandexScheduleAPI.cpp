@@ -12,7 +12,7 @@ YandexSchedule::YandexScheduleAPI::YandexScheduleAPI(const std::string& apiKey, 
 YandexSchedule::SearchResponse YandexSchedule::YandexScheduleAPI::search(
     const std::string& from, 
     const std::string& to, 
-    const SearchRequestParams&& params
+    const SearchRequestParams& params
 ) {
     auto url = cpr::Url{baseUrl_ + "search/"};
     auto cprParams = cpr::Parameters{
@@ -30,7 +30,7 @@ YandexSchedule::SearchResponse YandexSchedule::YandexScheduleAPI::search(
 
 YandexSchedule::ScheduleResponse YandexSchedule::YandexScheduleAPI::schedule(
     const std::string& station, 
-    const ScheduleRequestParams&& params
+    const ScheduleRequestParams& params
 ) {
     auto url = cpr::Url{baseUrl_ + "schedule/"};
     auto cprParams = cpr::Parameters{
@@ -47,7 +47,7 @@ YandexSchedule::ScheduleResponse YandexSchedule::YandexScheduleAPI::schedule(
 
 YandexSchedule::ThreadResponse YandexSchedule::YandexScheduleAPI::thread(
     const std::string& uid, 
-    const ThreadRequestParams&& params
+    const ThreadRequestParams& params
 ) {
     auto url = cpr::Url{baseUrl_ + "thread/"};
     auto cprParams = cpr::Parameters{
@@ -62,7 +62,7 @@ YandexSchedule::ThreadResponse YandexSchedule::YandexScheduleAPI::thread(
 YandexSchedule::NearestStationsResponse YandexSchedule::YandexScheduleAPI::nearestStations(
     const Geo&& geo,
     double distance, 
-    const NearestStationsRequestParams&& params
+    const NearestStationsRequestParams& params
 ) {
     auto url = cpr::Url{baseUrl_ + "nearest_stations/"};
     auto cprParams = cpr::Parameters{
@@ -80,7 +80,7 @@ YandexSchedule::NearestStationsResponse YandexSchedule::YandexScheduleAPI::neare
 YandexSchedule::NearestSettlementResponse YandexSchedule::YandexScheduleAPI::nearestSettlement(
     const Geo&& geo,
     double distance,
-    const NearestSettlementRequestParams&& params
+    const NearestSettlementRequestParams& params
 ) {
     auto url = cpr::Url{baseUrl_ + "nearest_settlement/"};
     auto cprParams = cpr::Parameters{
@@ -94,7 +94,7 @@ YandexSchedule::NearestSettlementResponse YandexSchedule::YandexScheduleAPI::nea
 
 YandexSchedule::CarrierResponse YandexSchedule::YandexScheduleAPI::carrier(
     const std::string& carrierCode,
-    const CarrierRequestParams&& params
+    const CarrierRequestParams& params
 ) {
     auto url = cpr::Url{baseUrl_ + "carrier/"};
     auto cprParams = cpr::Parameters{
@@ -107,7 +107,7 @@ YandexSchedule::CarrierResponse YandexSchedule::YandexScheduleAPI::carrier(
 }
 
 YandexSchedule::AllStationsReponse YandexSchedule::YandexScheduleAPI::allStations(
-    const BaseRequestParams&& params
+    const BaseRequestParams& params
 ) {
     auto url = cpr::Url{baseUrl_ + "stations_list/"};
     auto cprParams = cpr::Parameters{

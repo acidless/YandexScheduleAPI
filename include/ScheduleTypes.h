@@ -151,28 +151,24 @@ namespace YandexSchedule {
         std::optional<std::string> arrival_terminal;
         std::string start_date;
         std::optional<std::string> arrival_platform;
+        std::optional<bool> is_transfer;
+        std::optional<Transfer> transfer_point;
+        std::optional<Station> transfer_from;
+        std::optional<Station> transfer_to;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Detail,
         from, thread, departure_platform, stops,
         departure_terminal, to, duration, arrival_terminal,
-        start_date, arrival_platform
+        start_date, arrival_platform, is_transfer,
+        transfer_point, transfer_from, transfer_to
     )
 
     struct Segment : Detail {
-        Station from;
-        Thread thread;
-        std::string departure_platform;
         std::string stops;
-        std::optional<std::string> departure_terminal;
-        Station to;
         bool has_transfers;
         std::vector<Transfer> transfers;
         std::vector<Detail> details;
         Tickets tickets_info;
-        uint32_t duration;
-        std::optional<std::string> arrival_terminal;
-        std::string start_date;
-        std::optional<std::string> arrival_platform;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Segment,
         from, thread, departure_platform, stops,

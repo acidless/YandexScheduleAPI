@@ -6,6 +6,7 @@
 #include <optional>
 #include <cpr/cpr.h>
 #include <nlohmann/json.hpp>
+#include "Export.h"
 #include "ScheduleTypes.h"
 #include "Utils.h"
 #include "Cache/MemoryCache.h"
@@ -17,16 +18,6 @@
 #include "RequestParams/NearestSettlementRequestParams.h"
 #include "RequestParams/ThreadRequestParams.h"
 #include "RequestParams/CarrierRequestParams.h"
-
-#ifdef _WIN32
-    #ifdef YANDEX_SCHEDULE_EXPORTS
-        #define YANDEX_SCHEDULE_API __declspec(dllexport)
-    #else
-        #define YANDEX_SCHEDULE_API __declspec(dllimport)
-    #endif
-#else
-    #define YANDEX_SCHEDULE_API
-#endif
 
 using json = nlohmann::json;
 

@@ -1,16 +1,19 @@
 #pragma once
 #include <stdexcept>
 #include <string>
+#include <cpr/cpr.h>
+#include "Export.h"
 
 namespace YandexSchedule {
 
-class HTTPException : public std::runtime_error {
+class YANDEX_SCHEDULE_API HTTPException : public std::runtime_error {
 public:
-    explicit HTTPException(const std::string& message, long statusCode);
+    explicit HTTPException(const std::string& message, const cpr::Response& response);
 
-    long getStatusCode() const;
+    const char* what() const noexcept override;
 private:
-    long statusCode_;
+    std::string message_;
+    const cpr::Response& response_;
 };
 
 }

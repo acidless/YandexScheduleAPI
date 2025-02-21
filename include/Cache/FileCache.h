@@ -5,7 +5,7 @@
 
 namespace YandexSchedule {
 
-class FileCache : public Cache {
+class YANDEX_SCHEDULE_API FileCache : public Cache {
 public:
     FileCache(const char* filename);
     FileCache(const FileCache& other);

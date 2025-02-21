@@ -164,7 +164,7 @@ json YandexSchedule::YandexScheduleAPI::processResponse(const cpr::Response& res
     }
     
     if(response.status_code >= 400) {
-        throw HTTPException("HTTP error: ", response.status_code);
+        throw HTTPException("HTTP error:", response);
     }
     
     pCache_->set(response.url.c_str(), response.text);

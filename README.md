@@ -68,12 +68,14 @@ auto result = api.search("c2", "c213", params);
 To improve performance, the library supports request caching. This allows you to avoid repeated calls to Yandex API and reduce the load on the network.
 
 1️⃣ Caching in memory (default)
+
 In this mode, the cache runs only in RAM and is cleared when the program terminates.
 ```c++
 auto api = YandexScheduleAPI("YOUR_API_KEY");
 ```
 
 2️⃣ Caching to file
+
 This creates a FileCache object that stores the data in cache.json. This allows reusing the cached data after restarting the program.
 ```c++
 auto api = YandexScheduleAPI("YOUR_API_KEY", new FileCache("cache.json"));

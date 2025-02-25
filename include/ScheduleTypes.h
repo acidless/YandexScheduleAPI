@@ -168,7 +168,7 @@ namespace YandexSchedule {
         bool has_transfers;
         std::vector<Transfer> transfers;
         std::vector<Detail> details;
-        Tickets tickets_info;
+        std::optional<Tickets> tickets_info;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Segment,
         from, thread, departure_platform, stops,

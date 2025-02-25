@@ -116,7 +116,7 @@ YandexSchedule::AllStationsReponse YandexSchedule::YandexScheduleAPI::allStation
     };
 
     cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<AllStationsReponse>();
+    return getWithCache(url, cprParams).template get<AllStationsReponse>();
 }
 
 YandexSchedule::CopyrightResponse YandexSchedule::YandexScheduleAPI::copyright(
@@ -128,7 +128,7 @@ YandexSchedule::CopyrightResponse YandexSchedule::YandexScheduleAPI::copyright(
     };
 
     cpr::Response r = cpr::Get(url, cprParams);
-    return processResponse(r).template get<CopyrightResponse>();
+    return getWithCache(url, cprParams).template get<CopyrightResponse>();
 }
 
 json YandexSchedule::YandexScheduleAPI::getWithCache(

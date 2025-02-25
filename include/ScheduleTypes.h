@@ -70,7 +70,7 @@ namespace YandexSchedule {
     struct Carrier {
         int64_t code;
         std::string contracts;
-        std::string url;
+        std::optional<std::string> url;
         std::optional<std::string> logo_svg;
         std::string title;
         std::string phone;
@@ -119,7 +119,7 @@ namespace YandexSchedule {
     struct Place {
         std::string currency;
         Price price;
-        std::string name;
+        std::optional<std::string> name;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Place, currency, price, name)
 
